@@ -9,9 +9,10 @@ interface Props {
   onSend: (message: string) => void;
   onStop: () => void;
   isStreaming: boolean;
+  canStop: boolean;
 }
 
-function ChatInput({ onSend, onStop, isStreaming }: Props) {
+function ChatInput({ onSend, onStop, isStreaming, canStop }: Props) {
   const textareaRef = useRef<ChatInputTextareaHandle>(null);
   const [canSend, setCanSend] = useState(false);
 
@@ -41,6 +42,7 @@ function ChatInput({ onSend, onStop, isStreaming }: Props) {
         />
         <ChatInputSendButton
           isStreaming={isStreaming}
+          canStop={canStop}
           canSend={canSend}
           onSend={handleSend}
           onStop={onStop}

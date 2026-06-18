@@ -1,5 +1,6 @@
 interface Props {
   isStreaming: boolean;
+  canStop: boolean;
   canSend: boolean;
   onSend: () => void;
   onStop: () => void;
@@ -7,6 +8,7 @@ interface Props {
 
 export default function ChatInputSendButton({
   isStreaming,
+  canStop,
   canSend,
   onSend,
   onStop,
@@ -15,8 +17,9 @@ export default function ChatInputSendButton({
     return (
       <button
         onClick={onStop}
+        disabled={!canStop}
         aria-label="Stop"
-        className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500 transition-colors hover:bg-red-600 active:scale-95"
+        className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500 transition-colors hover:bg-red-600 active:scale-95 disabled:opacity-40"
       >
         <span className="h-3 w-3 rounded-sm bg-white" />
       </button>
@@ -28,7 +31,7 @@ export default function ChatInputSendButton({
       onClick={onSend}
       disabled={!canSend}
       aria-label="Send"
-      className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-maya-purple transition-colors hover:bg-maya-purple-dark active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+      className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-maya-purple transition-colors hover:bg-maya-purple-dark active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
     >
       <svg
         className="h-4 w-4 -rotate-45 text-white"

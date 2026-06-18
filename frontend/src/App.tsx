@@ -1,23 +1,10 @@
 import ChatInput from './components/chat/ChatInput';
 import ChatWindow from './components/chat/ChatWindow';
 import { APP_NAME, APP_SUBTITLE } from './constants';
+import { useChat } from './hooks/useChat';
 
 export default function App() {
-  const handleSend = (message: string) => {
-    console.log('send', message);
-  };
-
-  const handleStop = () => {
-    console.log('stop');
-  };
-
-  const handleResume = (messageId: string) => {
-    console.log('resume', messageId);
-  };
-
-  const handleRetry = (messageId: string) => {
-    console.log('retry', messageId);
-  };
+  const { messages, isStreaming, canStop, sendMessage, stopStream } = useChat();
 
   return (
     <div className="flex h-dvh flex-col bg-gray-50">
@@ -35,9 +22,14 @@ export default function App() {
         </div>
       </header>
 
-      <ChatWindow messages={[]} onResume={handleResume} onRetry={handleRetry} />
+      <ChatWindow messages={messages} onResume={() => {}} onRetry={() => {}} />
 
-      <ChatInput onSend={handleSend} onStop={handleStop} isStreaming={false} />
+      <ChatInput
+        onSend={sendMessage}
+        onStop={stopStream}
+        isStreaming={isStreaming}
+        canStop={canStop}
+      />
     </div>
   );
 }
