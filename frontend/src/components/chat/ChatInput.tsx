@@ -8,11 +8,20 @@ import ChatInputTextarea, {
 interface Props {
   onSend: (message: string) => void;
   onStop: () => void;
+  onResume: (messageId: string) => void;
   isStreaming: boolean;
   canStop: boolean;
+  stoppedMessageId: string | null;
 }
 
-function ChatInput({ onSend, onStop, isStreaming, canStop }: Props) {
+function ChatInput({
+  onSend,
+  onStop,
+  onResume,
+  isStreaming,
+  canStop,
+  stoppedMessageId,
+}: Props) {
   const textareaRef = useRef<ChatInputTextareaHandle>(null);
   const [canSend, setCanSend] = useState(false);
 
@@ -24,6 +33,7 @@ function ChatInput({ onSend, onStop, isStreaming, canStop }: Props) {
     textareaRef.current.clear();
     setCanSend(false);
     onSend(value);
+    textareaRef.current.focus();
   };
 
   const handleInput = () => {
@@ -44,8 +54,10 @@ function ChatInput({ onSend, onStop, isStreaming, canStop }: Props) {
           isStreaming={isStreaming}
           canStop={canStop}
           canSend={canSend}
+          stoppedMessageId={stoppedMessageId}
           onSend={handleSend}
           onStop={onStop}
+          onResume={() => stoppedMessageId && onResume(stoppedMessageId)}
         />
       </div>
       <p className="mt-2 text-center text-xs text-gray-300">

@@ -6,17 +6,23 @@ import MessageStatusActions from './MessageStatusActions';
 
 interface Props {
   message: Message;
+  isActiveAssistant: boolean;
   onResume?: () => void;
   onRetry?: () => void;
 }
 
-function MessageBubble({ message, onResume, onRetry }: Props) {
+function MessageBubble({
+  message,
+  isActiveAssistant,
+  onResume,
+  onRetry,
+}: Props) {
   const isUser = message.role === 'user';
 
   return (
     <div className={`flex w-full ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && (
-        <div className="self-start mr-2 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-maya-purple">
+        <div className="mr-2 mt-1 self-start flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-maya-purple">
           <span className="text-xs font-semibold text-white">
             {APP_NAME[0]}
           </span>
@@ -27,6 +33,7 @@ function MessageBubble({ message, onResume, onRetry }: Props) {
         <MessageBubbleContent message={message} />
         <MessageStatusActions
           message={message}
+          isActiveAssistant={isActiveAssistant}
           onResume={onResume}
           onRetry={onRetry}
         />

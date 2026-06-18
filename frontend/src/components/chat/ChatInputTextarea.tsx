@@ -14,6 +14,7 @@ interface Props {
 export interface ChatInputTextareaHandle {
   getValue: () => string;
   clear: () => void;
+  focus: () => void;
 }
 
 const ChatInputTextarea = forwardRef<ChatInputTextareaHandle, Props>(
@@ -27,6 +28,7 @@ const ChatInputTextarea = forwardRef<ChatInputTextareaHandle, Props>(
         inputRef.current.value = '';
         inputRef.current.style.height = 'auto';
       },
+      focus: () => inputRef.current?.focus(),
     }));
 
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -52,8 +54,9 @@ const ChatInputTextarea = forwardRef<ChatInputTextareaHandle, Props>(
           handleInput();
           onInput();
         }}
-        disabled={disabled}
-        className="flex-1 resize-none bg-transparent py-1.5 text-sm text-gray-800 placeholder-gray-400 outline-none disabled:cursor-not-allowed disabled:opacity-50"
+        className={`flex-1 resize-none bg-transparent py-1.5 text-sm text-gray-800 placeholder-gray-400 outline-none transition-opacity ${
+          disabled ? 'cursor-not-allowed opacity-50' : ''
+        }`}
       />
     );
   }

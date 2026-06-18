@@ -5,11 +5,17 @@ import MessageBubble from './message/MessageBubble';
 
 interface Props {
   messages: Message[];
+  activeAssistantId: string | null;
   onResume: (messageId: string) => void;
   onRetry: (messageId: string) => void;
 }
 
-export default function ChatWindow({ messages, onResume, onRetry }: Props) {
+export default function ChatWindow({
+  messages,
+  activeAssistantId,
+  onResume,
+  onRetry,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -35,6 +41,7 @@ export default function ChatWindow({ messages, onResume, onRetry }: Props) {
             <MessageBubble
               key={message.id}
               message={message}
+              isActiveAssistant={message.id === activeAssistantId}
               onResume={
                 message.status === 'stopped'
                   ? () => onResume(message.id)
