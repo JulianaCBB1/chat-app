@@ -2,6 +2,8 @@ import { useCallback, useEffect, useReducer, useRef } from 'react';
 import type { Message } from '../types';
 import { chatReducer, initialState } from './chatReducer';
 
+const API_URL = import.meta.env.VITE_API_URL ?? '';
+
 export function useChat() {
   const [state, dispatch] = useReducer(chatReducer, initialState);
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -71,7 +73,9 @@ export function useChat() {
       dispatch({ type: 'SET_STATUS', id: assistantId, status: 'streaming' });
       dispatch({ type: 'SET_ACTIVE_ASSISTANT', id: assistantId });
 
-      const es = new EventSource(`/stream?message=${encodeURIComponent(text)}`);
+      const es = new EventSource(
+        `${API_URL}/stream?message=${encodeURIComponent(text)}`
+      );
       eventSourceRef.current = es;
       attachEventHandlers(es, assistantId);
     },
@@ -83,7 +87,7 @@ export function useChat() {
     if (!streamId) return;
 
     try {
-      await fetch(`/stream/${streamId}/stop`, { method: 'POST' });
+      await fetch(`${API_URL}/stream/${streamId}/stop`, { method: 'POST' });
     } catch {
       // server will clean up on disconnect anyway
     }
@@ -94,7 +98,7 @@ export function useChat() {
     if (!streamId) return;
 
     try {
-      await fetch(`/stream/${streamId}/resume`, { method: 'POST' });
+      await fetch(`${API_URL}/stream/${streamId}/resume`, { method: 'POST' });
       dispatch({ type: 'SET_STATUS', id: messageId, status: 'streaming' });
       dispatch({ type: 'SET_STREAM_ID', streamId });
       dispatch({ type: 'SET_ACTIVE_ASSISTANT', id: messageId });
@@ -111,7 +115,7 @@ export function useChat() {
       dispatch({ type: 'RESET_MESSAGE', id: messageId });
       dispatch({ type: 'SET_ACTIVE_ASSISTANT', id: messageId });
 
-      const es = new EventSource(`/stream?message=retry`);
+      const es = new EventSource(`${API_URL}/stream?message=retry`);
       eventSourceRef.current = es;
       attachEventHandlers(es, messageId);
     },
